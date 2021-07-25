@@ -18,6 +18,7 @@ public class RPCServer implements MyInterface{
         studentInfos.put("20210000000000", "null");
         studentInfos.put("20210123456789", "心心");
         studentInfos.put("20210735010342", "黄冬冬");
+        System.out.printf("Client 请求学号ID%s", ID);
         return studentInfos.getOrDefault(ID, "Not Found");
     }
 
