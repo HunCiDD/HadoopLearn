@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>HadoopLearn_hdd</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -34,6 +34,11 @@
             <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
             <version>${hadoop.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>2.1.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -54,7 +59,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>PhoneData.PhoneDataMain</mainClass>
+                            <mainClass>HBaseTest.HBaseTestMain</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
