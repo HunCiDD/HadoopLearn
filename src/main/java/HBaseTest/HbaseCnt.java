@@ -1,11 +1,14 @@
 package HBaseTest;
 
+import java.util.List;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.NamespaceNotFoundException;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.KeyValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,18 +74,40 @@ class HbaseCnt {
     colName：
     value
     */
-    public static void insertRow(String tableName, String rowKey, String colFamily, String colName,
+    public void insertRow(String tableName, String rowKey, String colFamily, String colName,
                                  String value) throws Exception {
+        // 获取表对象
         TableName tName = TableName.valueOf(tableName);
         Table table = conn.getTable(tName);
+        // 创建put对象
         Put put = new Put(rowKey.getBytes());
+        // 给Put对象赋值
         put.addColumn(colFamily.getBytes(), colName.getBytes(), value.getBytes());
+        // 插入数据
         table.put(put);
+        // 关闭
         table.close();
     }
 
-    public static void deleteRow(String tableName, String rowKey) throws Exception {
+    public void queryRow(String tableName, String rowKey) throws Exception {
+        // 获取表对象
+        TableName tName = TableName.valueOf(tableName);
+        Table table = conn.getTable(tName);
+        Get get = new Get(rowKey.getBytes());
+        Result result = table.get(get);
+        System.out.println(result.toString());
+        // 6.关闭表连接
+        table.close();
 
+    }
+
+    public void deleteRow(String tableName, String rowKey) throws Exception {
+        TableName tName = TableName.valueOf(tableName);
+        Table table = conn.getTable(tName);
+        Delete del =new Delete(rowKey.getBytes());
+        table.delete(del);
+        table.close();
+        System.out.println("table delete row success!");
     }
 
 }
