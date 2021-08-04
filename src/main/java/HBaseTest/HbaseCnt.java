@@ -2,33 +2,39 @@ package HBaseTest;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.NamespaceDescriptor;
+import org.apache.hadoop.hbase.NamespaceNotFoundException;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 class HbaseCnt {
-    private final String host;
-    private final String port;
     private static Configuration conf;
     private static Connection conn;
     private static Admin admin;
-
-    public HbaseCnt(String cntHost, String cntPort) {
-        this.host = cntHost;
-        this.port = cntPort;
-    }
 
     public void init() throws Exception {
         // 创建配置对象
         conf = HBaseConfiguration.create();
         // zookeeper 地址和端口
-        conf.set("hbase.zookeeper.quorum", this.host);
-        conf.set("hbase.zookeeper.property.clientPort", this.port);
+        conf.set("hbase.rootdir", "hdfs://localhost:9000/hbase");
+        conf.set("hbase.zookeeper.quorum", "47.101.206.249:2181,47.101.216.12:2181,47.101.204.23:2181");
         // 创建连接
         conn = ConnectionFactory.createConnection(conf);
         // 创建admin
         admin = conn.getAdmin();
+    }
+
+    public void createNameSpace(String nameSpace) throws IOException {
+        try {
+            admin.getNamespaceDescriptor(nameSpace);
+        }catch (NamespaceNotFoundException e) {
+            //若发生特定的异常，即找不到命名空间，则创建命名空间
+            NamespaceDescriptor namespaceDescriptor = NamespaceDescriptor.create(nameSpace).build();
+            admin.createNamespace(namespaceDescriptor);
+        }
     }
 
     public void createTable(String tableName, String[] colFamilies) throws Exception {

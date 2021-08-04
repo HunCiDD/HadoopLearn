@@ -4,10 +4,12 @@ package HBaseTest;
 public class HBaseTestMain {
 
     public static void main(String[] args)throws Exception{
-        String tableName = "HDD_G20210735010342_01:student";
+        String nameSpace = "HuangDongDong";
+        String tableName = "HuangDongDong:HDD_student";
         String[] columnFamily = {"info", "score"};
-        HbaseCnt cnt = new HbaseCnt(args[0], args[1]);
+        HbaseCnt cnt = new HbaseCnt();
         cnt.init();
+        cnt.createNameSpace(nameSpace);
         cnt.createTable(tableName, columnFamily);
     }
 
